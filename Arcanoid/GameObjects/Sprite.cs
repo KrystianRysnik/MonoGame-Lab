@@ -8,7 +8,7 @@ namespace Arcanoid.GameObjects
 {
     class Sprite
     {
-        
+
         public bool CollidesWith(Sprite other)
         {
             // Default behavior uses per-pixel collision detection
@@ -82,3 +82,4 @@ namespace Arcanoid.GameObjects
 
         }
     }
+}

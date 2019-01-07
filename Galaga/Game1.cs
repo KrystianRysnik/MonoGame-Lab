@@ -1,4 +1,5 @@
 ﻿using Galaga.Display;
+using Galaga.Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -11,6 +12,9 @@ namespace Galaga
     /// </summary>
     public class Game1 : Game
     {
+        public static TextureManager textureManager;
+        public static int WIDTH, HEIGHT;
+
         GameScreen mGameScreen;
         TitleScreen mTitleScreen;
         PauseScreen mPauseScreen;
@@ -23,12 +27,11 @@ namespace Galaga
         public KeyboardState previousState;
         public Rectangle screenRectangle;
 
-        public Game1()
+       public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
-            graphics.PreferredBackBufferWidth = 1024;
+            graphics.PreferredBackBufferWidth = 686;
             graphics.PreferredBackBufferHeight = 720;
 
             screenRectangle = new Rectangle(
@@ -36,6 +39,8 @@ namespace Galaga
                 0,
                 graphics.PreferredBackBufferWidth,
                 graphics.PreferredBackBufferHeight);
+            WIDTH = graphics.PreferredBackBufferWidth;
+            HEIGHT = graphics.PreferredBackBufferHeight;
         }
 
         /// <summary>
@@ -63,10 +68,12 @@ namespace Galaga
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            textureManager = new TextureManager(this.Content);
+
             mGameScreen = new GameScreen(this.Content, screenRectangle, new EventHandler(GameScreenEvent));
-            mTitleScreen = new TitleScreen(this.graphics, this.Content, new EventHandler(TitleScreenEvent));
-            mPauseScreen = new PauseScreen(this.graphics, this.Content, new EventHandler(PauseScreenEvent));
-            mMainMenuScreen = new MainMenuScreen(this.graphics, this.Content, new EventHandler(MainMenuScreenEvent));
+            mTitleScreen = new TitleScreen(this.Content, screenRectangle, new EventHandler(TitleScreenEvent));
+            mPauseScreen = new PauseScreen(this.Content, screenRectangle, new EventHandler(PauseScreenEvent));
+            mMainMenuScreen = new MainMenuScreen(this.Content, screenRectangle, new EventHandler(MainMenuScreenEvent));
 
             mCurrentScreen = mTitleScreen;
         }

@@ -9,14 +9,14 @@ namespace Galaga.Display
     class PauseScreen : Screen
     {
         Texture2D pause;
+        Rectangle screenRectangle;
 
         Viewport viewport;
         Vector2 center;
 
-        public PauseScreen(GraphicsDeviceManager theGraphic, ContentManager theContent, EventHandler theScreenEvent) : base(theScreenEvent)
+        public PauseScreen(ContentManager theContent, Rectangle screenRectangle, EventHandler theScreenEvent) : base(theScreenEvent)
         {
-            viewport = theGraphic.GraphicsDevice.Viewport;
-            center = new Vector2(viewport.Width / 2, viewport.Height / 2);
+            this.screenRectangle = screenRectangle;
 
             pause = theContent.Load<Texture2D>("Image/pause");
         }
@@ -33,7 +33,7 @@ namespace Galaga.Display
         }
         public override void Draw(SpriteBatch theBatch)
         {
-            theBatch.Draw(pause, new Vector2(center.X - pause.Width / 2, center.Y - pause.Height / 2), Color.White);
+            theBatch.Draw(pause, new Vector2(screenRectangle.Width - pause.Width / 2, screenRectangle.Height - pause.Height / 2), Color.White);
             base.Draw(theBatch);
         }
     }

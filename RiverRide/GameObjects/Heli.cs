@@ -96,5 +96,7 @@ namespace RiverRide.GameObjects
                     spriteBatch.Draw(texture[frameIndex], Location, null, Color.White, 0.0f, new Vector2(0, 0), SpriteEffects.FlipHorizontally, 0.0f);
             }
         }
+
+       
     }
 }

@@ -13,6 +13,7 @@ namespace RiverRide.Display
     {
         PlanePlayer plane;
         Bullet bullet;
+      
 
         Texture2D gameover;
 

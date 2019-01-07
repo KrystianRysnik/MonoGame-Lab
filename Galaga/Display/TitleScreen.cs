@@ -12,16 +12,17 @@ namespace Galaga.Display
 {
     class TitleScreen : Screen
     {
-        Viewport viewport;
+        Rectangle screenRectangle;
         Texture2D logo;
         Vector2 center;
+        SpriteFont dosFont;
 
-        public TitleScreen(GraphicsDeviceManager theGraphic, ContentManager theContent, EventHandler theScreenEvent) : base(theScreenEvent)
+        public TitleScreen(ContentManager theContent, Rectangle screenRectangle, EventHandler theScreenEvent) : base(theScreenEvent)
         {
-            viewport = theGraphic.GraphicsDevice.Viewport;
-            center = new Vector2(viewport.Width / 2, viewport.Height / 2);
+            this.screenRectangle = screenRectangle;
 
             logo = theContent.Load<Texture2D>("Image/logo");
+            dosFont = theContent.Load <SpriteFont>("Font/DOS_Font");
         }
               
         public override void Update(GameTime theTime)
@@ -36,7 +37,10 @@ namespace Galaga.Display
         
         public override void Draw(SpriteBatch theBatch)
         {
-            theBatch.Draw(logo, new Vector2(center.X - logo.Width/2, center.Y - logo.Height/2), Color.White);
+            theBatch.Draw(logo, new Vector2((screenRectangle.Width - logo.Width)/2, (screenRectangle.Height - logo.Height)/2), Color.White);
+            theBatch.DrawString(dosFont, "PRESS", new Vector2(screenRectangle.Width / 2 - 223, screenRectangle.Height - 50), Color.White);
+            theBatch.DrawString(dosFont, "SPACE", new Vector2(screenRectangle.Width / 2 - 115, screenRectangle.Height - 50), new Color(68, 255, 255));
+            theBatch.DrawString(dosFont, "TO START GAME", new Vector2(screenRectangle.Width / 2 - 8, screenRectangle.Height - 50), Color.White);
             base.Draw(theBatch);
         }
     }
