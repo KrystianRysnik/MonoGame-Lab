@@ -20,7 +20,6 @@ namespace Galaga.Display
         SpriteFont dosFont;
 
         int[] spawnEnemy = new int[5] { 4, 8, 8, 8, 8 };
-        int spaceBetween = 0;
         int score = 0;
 
         double elapsedTime = 0, timeToUpdate = 200, fourSec = 3000;
@@ -30,6 +29,7 @@ namespace Galaga.Display
             dosFont = theContent.Load<SpriteFont>("Font/DOS_Font");
 
             player = new Ship(Game1.textureManager.player, screenRectangle);
+          
         }
 
         public override void Update(GameTime theTime)
@@ -39,7 +39,7 @@ namespace Galaga.Display
                 ScreenEvent.Invoke(this, new EventArgs());
                 return;
             }
-
+            
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
                 if (isGameOver == true)
                     StartGame();
@@ -72,14 +72,9 @@ namespace Galaga.Display
                     }
                 }
             }
-
-
+                              
             elapsedTime += theTime.ElapsedGameTime.TotalMilliseconds;
         
-            if (elapsedTime > timeToUpdate * 5)
-            {
-                stars.Add(new Star());
-            }
             if (spawnEnemy[0] != 0)
             {
                 if (elapsedTime > timeToUpdate)
@@ -90,7 +85,6 @@ namespace Galaga.Display
 
                     enemies.Add(enemyLeft);
                     enemies.Add(enemyRight);
-                    spaceBetween += 49;
                     spawnEnemy[0]--;
                 }
             }
@@ -108,7 +102,6 @@ namespace Galaga.Display
                             enemyLeft = new Enemy("Butterfly", "secondEncounter", Game1.textureManager.enemyRed);
 
                         enemies.Add(enemyLeft);
-                        spaceBetween += 49;
                         spawnEnemy[1]--;
                     }
                 }
@@ -124,7 +117,6 @@ namespace Galaga.Display
                         enemyRight = new Enemy("Butterfly", "thirdEncounter", Game1.textureManager.enemyRed);
 
                         enemies.Add(enemyRight);
-                        spaceBetween += 49;
                         spawnEnemy[2]--;
                     }
                 }
@@ -139,7 +131,6 @@ namespace Galaga.Display
                         enemyLeft = new Enemy("Bee", "fourthEncounter", Game1.textureManager.enemyYellow);
 
                         enemies.Add(enemyLeft);
-                        spaceBetween += 49;
                         spawnEnemy[3]--;
                     }
                 }
@@ -155,7 +146,6 @@ namespace Galaga.Display
                         enemyRight = new Enemy("Bee", "fifthEncounter", Game1.textureManager.enemyYellow);
 
                         enemies.Add(enemyRight);
-                        spaceBetween += 49;
                         spawnEnemy[4]--;
                     }
                 }
@@ -165,15 +155,17 @@ namespace Galaga.Display
             foreach (Enemy enemy in enemies)
                 enemy.Update(theTime);
 
+            if (stars.Count <= STAR_SIZE)
+                stars.Add(new Star());                
+       
             foreach (Star star in stars)
                 star.Update(theTime);
-           
 
         }
         public override void Draw(SpriteBatch theBatch)
         {
             theBatch.DrawString(dosFont, "SCORE", new Vector2(10, 10), Color.Red);
-            theBatch.DrawString(dosFont, "" + stars.Count, new Vector2(10, 40), Color.White);
+            theBatch.DrawString(dosFont, "" + score, new Vector2(10, 40), Color.White);
             player.Draw(theBatch);
             foreach (Bullet bullet in player.bullets)
                 bullet.Draw(theBatch);
@@ -182,9 +174,12 @@ namespace Galaga.Display
             for (int i = stars.Count - 1; i >= 0; i--)
             {
                 stars[i].Draw(theBatch);
+                if (stars[i].isVisible == false)
+                    stars.Remove(stars[i]);
             }
             base.Draw(theBatch);
         }
+
         public void StartGame()
         {
             stars.Clear();
@@ -194,15 +189,16 @@ namespace Galaga.Display
             isGameOver = false;
 
             elapsedTime = 0;
-            spawnEnemy = new int[5] { 4, 8, 8, 8, 8};
-            spaceBetween = 0;
+            spawnEnemy = new int[5] { 4, 8, 8, 8, 8 };
             score = 0;
             Level.whichEnemy = 0;
-
-            for (int i = 0; i < STAR_SIZE; i++)
-            {
-                stars.Add(new Star());
-            }
+        }
+        private void nextStage()
+        { 
+            enemies.Clear();
+            player.bullets.Clear();
+            spawnEnemy = new int[5] { 4, 8, 8, 8, 8 };
+            Level.whichEnemy = 0;
         }
     }
 }
