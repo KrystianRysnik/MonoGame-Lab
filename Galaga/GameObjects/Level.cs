@@ -19,54 +19,34 @@ namespace Galaga.GameObjects
         public static Vector2[] endPosition = new Vector2[40]
         {
             // First
-            new Vector2(296, 206),
-            new Vector2(296, 102),
-            new Vector2(345, 206),
-            new Vector2(345, 102),
-            new Vector2(296, 258),
-            new Vector2(296, 154),
-            new Vector2(345, 258),
-            new Vector2(345, 154),
+            new Vector2(296, 206), new Vector2(296, 102),
+            new Vector2(345, 206), new Vector2(345, 102),
+            new Vector2(296, 258), new Vector2(296, 154),
+            new Vector2(345, 258), new Vector2(345, 154),
             // Second
-            new Vector2(247, 50),
-            new Vector2(247, 102),
-            new Vector2(296, 50),
-            new Vector2(394, 102),
-            new Vector2(345, 50),
-            new Vector2(247, 154),
-            new Vector2(394, 50),
-            new Vector2(394, 154),
+            new Vector2(247, 50), new Vector2(247, 102),
+            new Vector2(296, 50), new Vector2(394, 102),
+            new Vector2(345, 50), new Vector2(247, 154),
+            new Vector2(394, 50), new Vector2(394, 154),
             // Third
-            new Vector2(149, 102),
-            new Vector2(443, 102),
-            new Vector2(198, 102),
-            new Vector2(482, 102),
-            new Vector2(149, 154),
-            new Vector2(443, 154),
-            new Vector2(198, 154),
-            new Vector2(482, 154),
+            new Vector2(149, 102), new Vector2(443, 102),
+            new Vector2(198, 102), new Vector2(482, 102),
+            new Vector2(149, 154), new Vector2(443, 154),
+            new Vector2(198, 154), new Vector2(482, 154),
             // Fourth
-            new Vector2(198, 206),
-            new Vector2(394, 206),
-            new Vector2(247, 206),
-            new Vector2(443, 206),
-            new Vector2(198, 258),
-            new Vector2(394, 258),
-            new Vector2(247, 258),
-            new Vector2(443, 258),
+            new Vector2(198, 206), new Vector2(394, 206),
+            new Vector2(247, 206), new Vector2(443, 206),
+            new Vector2(198, 258), new Vector2(394, 258),
+            new Vector2(247, 258), new Vector2(443, 258),
             // Fifth
-            new Vector2(100, 206),
-            new Vector2(482, 206),
-            new Vector2(149, 206),
-            new Vector2(531, 206),
-            new Vector2(100, 258),
-            new Vector2(482, 258),
-            new Vector2(149, 258),
-            new Vector2(531, 258)
+            new Vector2(100, 206), new Vector2(482, 206),
+            new Vector2(149, 206), new Vector2(531, 206),
+            new Vector2(100, 258), new Vector2(482, 258),
+            new Vector2(149, 258), new Vector2(531, 258)
         };
 
         /**
-         * First Encounter
+         * FIRST ENCOUNTER
          */
         public static List<Vector2> FirstEncounterOnePath(List<Vector2> list)
         {
@@ -78,7 +58,7 @@ namespace Galaga.GameObjects
             }
             for (float t = 0; t <= 1.0f; t += 0.1f)
             {
-                newPoint = GetPoint(t, new Vector2(firstEncounterOne.X - 184 - 60, 250), new Vector2(firstEncounterOne.X - 184 - 60 - 180, 250), new Vector2(firstEncounterOne.X - 184 - 60 - 180, 500), new Vector2(firstEncounterOne.X - 184 - 60, 500));
+                newPoint = GetPoint(t, new Vector2(firstEncounterOne.X - 184 - 60, 250), new Vector2(firstEncounterOne.X - 184 - 60 - 100, 250), new Vector2(firstEncounterOne.X - 184 - 60 - 100, 500), new Vector2(firstEncounterOne.X - 184 - 60, 500));
                 list.Add(newPoint);
             }
             for (float t = 0; t <= 1.0f; t += 0.1f)
@@ -95,27 +75,27 @@ namespace Galaga.GameObjects
         {
             Vector2 newPoint;
             for (float t = 0; t <= 1.0f; t += 0.1f)
-            {   // 384 384 200 140
+            {   
                 newPoint = GetPoint(t, new Vector2(firstEncounterTwo.X, 0), new Vector2(firstEncounterTwo.X, 250), new Vector2(firstEncounterTwo.X + 184, 250), new Vector2(firstEncounterTwo.X + 184 + 60, 250));
                 list.Add(newPoint);
             }
             for (float t = 0; t <= 1.0f; t += 0.1f)
-            {
-                // 140 -40 -40 140
-                newPoint = GetPoint(t, new Vector2(firstEncounterTwo.X + 184 + 60, 250), new Vector2(firstEncounterTwo.X + 184 + 60 + 100, 250), new Vector2(firstEncounterTwo.X + 184 + 60 + 180, 500), new Vector2(firstEncounterTwo.X + 184 + 60, 500));
+            {              
+                newPoint = GetPoint(t, new Vector2(firstEncounterTwo.X + 184 + 60, 250), new Vector2(firstEncounterTwo.X + 184 + 60 + 100, 250), new Vector2(firstEncounterTwo.X + 184 + 60 + 100, 500), new Vector2(firstEncounterTwo.X + 184 + 60, 500));
                 list.Add(newPoint);
             }
             for (float t = 0; t <= 1.0f; t += 0.1f)
             {
-                newPoint = GetPoint(t, new Vector2(firstEncounterTwo.X + 184 + 60, 500), new Vector2(firstEncounterTwo.X + 184 + 60 + 40, 500), new Vector2(343, 500), new Vector2(343, 300));
+                newPoint = GetPoint(t, new Vector2(firstEncounterTwo.X + 184 + 60, 500), new Vector2(firstEncounterTwo.X + 184 + 60 - 40, 500), new Vector2(343, 500), new Vector2(343, 300));
                 list.Add(newPoint);
             }
             list.Add(endPosition[whichEnemy]);
             whichEnemy++;
             return list;
         }
+
         /**
-         * Second encounter
+         * SECOND ENCOUNTER
          */
         public static List<Vector2> SecondEncounterPath(List<Vector2> list)
         {
@@ -140,6 +120,9 @@ namespace Galaga.GameObjects
             return list;
         }
 
+        /**
+        * THIRD ENCOUNTER
+        */
         public static List<Vector2> ThirdEncounterPath(List<Vector2> list)
         {
             Vector2 newPoint;
@@ -162,6 +145,10 @@ namespace Galaga.GameObjects
             whichEnemy++;
             return list;
         }
+
+        /**
+        * FORTH ENCOUNTER
+        */
         public static List<Vector2> FourthEncounter(List<Vector2> list)
         {
             Vector2 newPoint;
@@ -179,6 +166,10 @@ namespace Galaga.GameObjects
             whichEnemy++;
             return list;
         }
+
+        /**
+        * FIFTH ENCOUNTER
+        */
         public static List<Vector2> FifthEncounter(List<Vector2> list)
         {
             Vector2 newPoint;
