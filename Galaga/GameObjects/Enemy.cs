@@ -10,6 +10,7 @@ namespace Galaga.GameObjects
 {
     class Enemy
     {
+        int id;
         string name;
         string formationName;
         Texture2D[] texture;
@@ -20,17 +21,19 @@ namespace Galaga.GameObjects
         Rectangle location;
         public bool isLive = true;
         public bool isDestroyed = false;
-
+        public bool isDiving = false;
 
         int textureIdx = 0;
         int destroyIdx = 0;
         double elapsedTime, timeToUpdate = 500;
+        float angle;
 
         public Rectangle Location { get => location; }
         public string Name { get => name; }
 
-        public Enemy(string enemyName, string formationName, Texture2D[] texture)
+        public Enemy(string enemyName, string formationName, Texture2D[] texture, int id)
         {
+            this.id = id;
             this.name = enemyName;
             this.formationName = formationName;
             this.texture = texture;
@@ -38,32 +41,32 @@ namespace Galaga.GameObjects
             // First encounter
             if (formationName == "firstEncounterOne")
             {
-                path = Level.FirstEncounterOnePath(path);
+                path = Level.FirstEncounterOnePath(path, id);
                 this.position = Level.firstEncounterOne;
             }
             else if (formationName == "firstEncounterTwo")
             {
-                path = Level.FirstEncounterTwoPath(path);
+                path = Level.FirstEncounterTwoPath(path, id);
                 this.position = Level.firstEncounterTwo;
             }
             else if (formationName == "secondEncounter")
             {
-                path = Level.SecondEncounterPath(path);
+                path = Level.SecondEncounterPath(path, id);
                 this.position = Level.secondEncounter;
             }
             else if (formationName == "thirdEncounter")
             {
-                path = Level.ThirdEncounterPath(path);
+                path = Level.ThirdEncounterPath(path, id);
                 this.position = Level.thirdEncounter;
             }
             else if (formationName == "fourthEncounter")
             {
-                path = Level.FourthEncounter(path);
+                path = Level.FourthEncounter(path, id);
                 this.position = Level.fourthEncounter;
             }
             else if (formationName == "fifthEncounter")
             {
-                path = Level.FifthEncounter(path);
+                path = Level.FifthEncounter(path, id);
                 this.position = Level.fifthEncounter;
             }           
         }
@@ -75,6 +78,9 @@ namespace Galaga.GameObjects
             {
                 if (path.Count > 0 && MoveTowardsPoint(path[0], elapsed))
                     path.RemoveAt(0);
+                else if (path.Count == 0)
+                    angle = 0;
+                
 
                 elapsedTime += gameTime.ElapsedGameTime.TotalMilliseconds;
 
@@ -112,21 +118,24 @@ namespace Galaga.GameObjects
             if (isLive)
             {
                 if (!isDestroyed && isLive)
-                    spriteBatch.Draw(texture[textureIdx], position, Color.White);
+                {
+                    spriteBatch.Draw(texture[textureIdx], Location, null, Color.White, angle, new Vector2(texture[textureIdx].Width/2, texture[textureIdx].Height/2), SpriteEffects.None, 1);
+                   // spriteBatch.Draw(texture[textureIdx], position, Color.White);
+                }
                 else if (isDestroyed && isLive)
                 {
-                    spriteBatch.Draw(Game1.textureManager.enemyDestroyed[destroyIdx], new Vector2(position.X - (Game1.textureManager.enemyDestroyed[destroyIdx].Width / 2) + (texture[textureIdx].Width / 2), position.Y - (Game1.textureManager.enemyDestroyed[destroyIdx].Height / 2) + (texture[textureIdx].Height / 2)), Color.White);
+                    spriteBatch.Draw(Game1.textureManager.enemyDestroyed[destroyIdx], new Vector2(position.X - (Game1.textureManager.enemyDestroyed[destroyIdx].Width/2), position.Y - (Game1.textureManager.enemyDestroyed[destroyIdx].Height/2)), Color.White);
                 }
             }
         }
         private bool MoveTowardsPoint(Vector2 goal, float elapsed)
         {
             if (position == goal) return true;
-
             Vector2 direction = Vector2.Normalize(goal - position);
+            angle = (float)Math.Atan2(-direction.X, direction.Y);
 
             position += direction * speed * elapsed;
-
+                     
             if (Math.Abs(Vector2.Dot(direction, Vector2.Normalize(goal - position)) + 1) < 0.1f)
                 position = goal;
 
@@ -135,7 +144,7 @@ namespace Galaga.GameObjects
 
         private void updateBoundingBox(Vector2 vector)
         {
-            location = new Rectangle((int)vector.X, (int)vector.Y, texture[0].Width, texture[0].Height);
+            location = new Rectangle((int)vector.X, (int)vector.Y, texture[textureIdx].Width, texture[textureIdx].Height);
         }
     }
 }
