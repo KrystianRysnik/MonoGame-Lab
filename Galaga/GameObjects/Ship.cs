@@ -48,11 +48,11 @@ namespace Galaga.GameObjects
 
             if (keyboardState.IsKeyDown(Keys.Left) || keyboardState.IsKeyDown(Keys.Right))
             {
-                if (keyboardState.IsKeyDown(Keys.Left))
+                if (keyboardState.IsKeyDown(Keys.Left) && Location.X > 0)
                 {
                     motion.X = -1;
                 }
-                if (keyboardState.IsKeyDown(Keys.Right))
+                if (keyboardState.IsKeyDown(Keys.Right) && Location.X <= screenRectangle.Width - 54)
                 {
                     motion.X = 1;
                 }

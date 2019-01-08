@@ -11,8 +11,8 @@ namespace Galaga.GameObjects
     {
         public static Vector2 firstEncounterOne = new Vector2(343 + 30, -60);
         public static Vector2 firstEncounterTwo = new Vector2(343 - 30, -60);
-        public static Vector2 secondEncounter = new Vector2(-60, 550);
-        public static Vector2 thirdEncounter = new Vector2(686 - 45 + 60, 550);
+        public static Vector2 secondEncounter = new Vector2(-60, 510);
+        public static Vector2 thirdEncounter = new Vector2(686 - 45 + 60, 510);
         public static Vector2 fourthEncounter = new Vector2(383 - 45, - 60);
         public static Vector2 fifthEncounter = new Vector2(383 - 45, - 60);
         public static Vector2[] endPosition = new Vector2[40]
@@ -102,7 +102,7 @@ namespace Galaga.GameObjects
             Vector2 newPoint;
             for (float t = 0; t <= 1.0f; t += 0.1f)
             {
-                newPoint = GetPoint(t, new Vector2(secondEncounter.X + 60, 550), new Vector2(secondEncounter.X + 60 + 100, 530), new Vector2(secondEncounter.X + 60 + 230, 460), new Vector2(secondEncounter.X + 60 + 240, 350));
+                newPoint = GetPoint(t, new Vector2(secondEncounter.X + 60, 510), new Vector2(secondEncounter.X + 60 + 100, 510), new Vector2(secondEncounter.X + 60 + 230, 460), new Vector2(secondEncounter.X + 60 + 240, 350));
                 list.Add(newPoint);
             }
             for (float t = 0; t <= 1.0f; t += 0.1f)
@@ -127,7 +127,7 @@ namespace Galaga.GameObjects
             Vector2 newPoint;
             for (float t = 0; t <= 1.0f; t += 0.1f)
             {
-                newPoint = GetPoint(t, new Vector2(thirdEncounter.X - 60, 550), new Vector2(thirdEncounter.X - 60 - 100, 530), new Vector2(thirdEncounter.X - 60 - 230, 460), new Vector2(thirdEncounter.X - 60 - 240, 350));
+                newPoint = GetPoint(t, new Vector2(thirdEncounter.X - 60, 510), new Vector2(thirdEncounter.X - 60 - 100, 510), new Vector2(thirdEncounter.X - 60 - 230, 460), new Vector2(thirdEncounter.X - 60 - 240, 350));
                 list.Add(newPoint);
             }
             for (float t = 0; t <= 1.0f; t += 0.1f)
