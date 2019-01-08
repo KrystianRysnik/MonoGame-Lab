@@ -27,8 +27,10 @@ namespace Galaga.GameObjects
         int destroyIdx = 0;
         double elapsedTime, timeToUpdate = 500;
         float angle;
+        Random random;
 
         public Rectangle Location { get => location; }
+        public List<EnemyBullet> enemyBullets = new List<EnemyBullet>();
         public string Name { get => name; }
 
         public Enemy(string enemyName, string formationName, Texture2D[] texture, int id)
@@ -37,6 +39,7 @@ namespace Galaga.GameObjects
             this.name = enemyName;
             this.formationName = formationName;
             this.texture = texture;
+            random = new Random();
 
             // First encounter
             if (formationName == "firstEncounterOne")
@@ -93,6 +96,10 @@ namespace Galaga.GameObjects
                     else
                         textureIdx = 0;
                 }
+                if (random.Next() % 12000 <= 2)
+                {
+                    AddBullet(enemyBullets);
+                }
             }
             else if (isDestroyed && isLive)
             {
@@ -108,6 +115,12 @@ namespace Galaga.GameObjects
                         isLive = false;
                 }
             }
+            if (isDiving == true)
+            {
+                Level.Diving(path, id);
+                angle = 90;
+                isDiving = false;
+            }
 
           
 
@@ -120,7 +133,6 @@ namespace Galaga.GameObjects
                 if (!isDestroyed && isLive)
                 {
                     spriteBatch.Draw(texture[textureIdx], Location, null, Color.White, angle, new Vector2(texture[textureIdx].Width/2, texture[textureIdx].Height/2), SpriteEffects.None, 1);
-                   // spriteBatch.Draw(texture[textureIdx], position, Color.White);
                 }
                 else if (isDestroyed && isLive)
                 {
@@ -145,6 +157,17 @@ namespace Galaga.GameObjects
         private void updateBoundingBox(Vector2 vector)
         {
             location = new Rectangle((int)vector.X, (int)vector.Y, texture[textureIdx].Width, texture[textureIdx].Height);
+        }
+        public void AddBullet(List<EnemyBullet> enemyBullets)
+        {
+            var eBullet = new EnemyBullet(Game1.textureManager.enemyBullet, new Rectangle(
+                location.X + (texture[textureIdx].Width / 2) - (Game1.textureManager.bullet.Width / 2),
+                location.Y - texture[textureIdx].Height,
+                texture[textureIdx].Width,
+                texture[textureIdx].Height)
+                );
+
+            enemyBullets.Add(eBullet);
         }
     }
 }

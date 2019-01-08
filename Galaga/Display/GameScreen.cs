@@ -24,16 +24,19 @@ namespace Galaga.Display
         int score = 0;
         int whichEnemy = -1;
         int stage = 1;
+        int dive = 0;
         bool isNewStage = false;
+        Random random;
 
         double elapsedTime = 0, timeToUpdate = 200, fourSec = 3000;
 
         public GameScreen(ContentManager theContent, Rectangle screenRectangle, EventHandler theScreenEvent) : base(theScreenEvent)
         {
             this.screenRectangle = screenRectangle;
+            random = new Random();
 
             dosFont = theContent.Load<SpriteFont>("Font/DOS_Font");
-            player = new Ship(Game1.textureManager.player, screenRectangle);
+            player = new Ship(Game1.textureManager.ship, screenRectangle);
         }
 
         public override void Update(GameTime theTime)
@@ -43,20 +46,29 @@ namespace Galaga.Display
                 ScreenEvent.Invoke(this, new EventArgs());
                 return;
             }
-            
+
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
                 if (isGameOver == true)
                     StartGame();
 
             player.Update(theTime);
 
+            if (!player.isLive)
+            {
+                isGameOver = true;
+                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                {
+                    StartGame();
+                }
+            }
+
             foreach (Bullet bullet in player.bullets)
             {
                 bullet.Update(theTime);
                 foreach (Enemy enemy in enemies)
                 {
-                    if (!enemy.isDestroyed && !bullet.isRemoved 
-                        && bullet.Location.Intersects(new Rectangle(enemy.Location.X - enemy.Location.Width/2, enemy.Location.Y - enemy.Location.Height/2, enemy.Location.Width, enemy.Location.Height)))
+                    if (!enemy.isDestroyed && !bullet.isRemoved
+                        && bullet.Location.Intersects(new Rectangle(enemy.Location.X - enemy.Location.Width / 2, enemy.Location.Y - enemy.Location.Height / 2, enemy.Location.Width, enemy.Location.Height)))
                     {
                         enemy.isDestroyed = true;
                         bullet.isRemoved = true;
@@ -77,7 +89,7 @@ namespace Galaga.Display
                     }
                 }
             }
-                              
+
             elapsedTime += theTime.ElapsedGameTime.TotalMilliseconds;
 
             if (spawnEnemy[0] != 0)
@@ -162,7 +174,21 @@ namespace Galaga.Display
 
 
             foreach (Enemy enemy in enemies)
+            {
                 enemy.Update(theTime);
+                if (enemy.Location.Intersects(player.Location))
+                {
+                    player.isDestroyed = true;                 
+                }
+                foreach (EnemyBullet bullet in enemy.enemyBullets)
+                {
+                    bullet.Update(theTime);
+                    if (bullet.Location.Intersects(player.Location))
+                    {
+                        player.isDestroyed = true;
+                    }
+                }
+            }
 
             if (stars.Count <= STAR_SIZE)
                 stars.Add(new Star());
@@ -170,26 +196,52 @@ namespace Galaga.Display
             foreach (Star star in stars)
                 star.Update(theTime);
 
-            if (spawnEnemy[4] == 0 && enemies.Count == 0)
+            if (spawnEnemy[4] == 0)
             {
-                NextStage();
+
+                if (enemies.Count == 0)
+                {
+                    NextStage();
+                }
+                else if (elapsedTime > fourSec * 6)
+                {
+                    if (elapsedTime > timeToUpdate * 5)
+                    {
+                        elapsedTime -= timeToUpdate * 10;
+                        if (enemies.Count > 1)
+                        {
+                            try
+                            {
+                                enemies[dive].isDiving = true;
+                                dive++;
+                                if (dive > enemies.Count - 1)
+                                {
+                                    dive = 0;
+                                    elapsedTime -= fourSec * 10;
+
+                                }
+                            }
+                            catch (ArgumentOutOfRangeException e) { };
+                        }
+                    }
+                }
             }
         }
+        
         public override void Draw(SpriteBatch theBatch)
         {
-            if (isNewStage == true)
-                theBatch.DrawString(dosFont, "STAGE " + stage, new Vector2(screenRectangle.Width/2 - dosFont.Texture.Width/2, screenRectangle.Height/2 - dosFont.Texture.Height/2), Color.Red);
-            theBatch.DrawString(dosFont, "SCORE", new Vector2(10, 10), Color.Red);
-            theBatch.DrawString(dosFont, "" + score, new Vector2(10, 40), Color.White);
-            theBatch.DrawString(dosFont, "STAGE ", new Vector2(10, screenRectangle.Height - 60), Color.Red);
-            theBatch.DrawString(dosFont, "" + stage, new Vector2(110, screenRectangle.Height - 60), Color.White);
-
             player.Draw(theBatch);
             foreach (Bullet bullet in player.bullets)
+            {
                 bullet.Draw(theBatch);
-           for (int i = enemies.Count - 1; i >= 0; i--)
+            }
+            for (int i = enemies.Count - 1; i >= 0; i--)
             {
                 enemies[i].Draw(theBatch);
+                foreach (EnemyBullet bullet in enemies[i].enemyBullets)
+                {
+                    bullet.Draw(theBatch);
+                }
                 if (enemies[i].isLive == false)
                     enemies.Remove(enemies[i]);
             }
@@ -198,6 +250,25 @@ namespace Galaga.Display
                 stars[i].Draw(theBatch);
                 if (stars[i].isVisible == false)
                     stars.Remove(stars[i]);
+            }
+
+            if (isGameOver)
+            {
+                theBatch.DrawString(dosFont, "GAME OVER", new Vector2(screenRectangle.Width / 2 - 79, screenRectangle.Height / 2 - 100), new Color(68, 255, 255));
+                theBatch.DrawString(dosFont, "SCORE", new Vector2(screenRectangle.Width / 2 - 43, screenRectangle.Height / 2 - 50), Color.Red);
+                theBatch.DrawString(dosFont, "" + score, new Vector2(screenRectangle.Width / 2 - 43, screenRectangle.Height / 2), Color.White);
+                theBatch.DrawString(dosFont, "PRESS SPACE TO PLAY AGAIN", new Vector2(screenRectangle.Width / 2 - 223, screenRectangle.Height / 2 + 200), new Color(68, 255, 255));
+            }
+            else
+            {
+                theBatch.DrawString(dosFont, "SCORE", new Vector2(10, 10), Color.Red);
+                theBatch.DrawString(dosFont, "" + score, new Vector2(10, 40), Color.White);
+                theBatch.DrawString(dosFont, "STAGE ", new Vector2(10, screenRectangle.Height - 60), Color.Red);
+                theBatch.DrawString(dosFont, "" + stage, new Vector2(110, screenRectangle.Height - 60), Color.White);
+                if (isNewStage == true)
+                {
+                    theBatch.DrawString(dosFont, "STAGE " + stage, new Vector2(screenRectangle.Width / 2 - dosFont.Texture.Width / 2, screenRectangle.Height / 2 - dosFont.Texture.Height / 2), Color.Red);
+                }
             }
             base.Draw(theBatch);
         }
@@ -210,10 +281,12 @@ namespace Galaga.Display
             isGameStarted = true;
             isGameOver = false;
             isNewStage = true;
+            player = new Ship(Game1.textureManager.ship, screenRectangle);
 
             elapsedTime = 0;
             spawnEnemy = new int[5] { 4, 8, 8, 8, 8 };
             score = 0;
+            stage = 1;
             whichEnemy = -1;
         }
         private void NextStage()

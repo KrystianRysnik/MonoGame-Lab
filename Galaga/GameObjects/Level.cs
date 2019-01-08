@@ -188,14 +188,15 @@ namespace Galaga.GameObjects
             Vector2 newPoint;
             for (float t = 0; t <= 1.0f; t += 0.1f)
             {
-                newPoint = GetPoint(t, new Vector2(endPosition[whichEnemy].X, endPosition[whichEnemy].Y), new Vector2(endPosition[whichEnemy].X - 190, endPosition[whichEnemy].Y + 170), new Vector2(endPosition[whichEnemy].X + 330, endPosition[whichEnemy].Y + 650), new Vector2(endPosition[whichEnemy].X, endPosition[whichEnemy].Y + 680));
+                newPoint = GetPoint(t, new Vector2(endPosition[whichEnemy].X, endPosition[whichEnemy].Y), new Vector2(endPosition[whichEnemy].X - 190, endPosition[whichEnemy].Y + 170), new Vector2(endPosition[whichEnemy].X + 330, 650), new Vector2(endPosition[whichEnemy].X, 680));
                 list.Add(newPoint);
             }
             for (float t = 0; t <= 1.0f; t += 0.1f)
             {
-                newPoint = GetPoint(t, new Vector2(endPosition[whichEnemy].X, endPosition[whichEnemy].Y + 680), new Vector2(endPosition[whichEnemy].X - 240, endPosition[whichEnemy].Y - 680), new Vector2(endPosition[whichEnemy].X + 30, endPosition[whichEnemy].Y + 300), new Vector2(endPosition[whichEnemy].X, endPosition[whichEnemy].Y));
+                newPoint = GetPoint(t, new Vector2(endPosition[whichEnemy].X, 680), new Vector2(endPosition[whichEnemy].X - 240, 680), new Vector2(endPosition[whichEnemy].X + 30, endPosition[whichEnemy].Y + 300), new Vector2(endPosition[whichEnemy].X, endPosition[whichEnemy].Y));
                 list.Add(newPoint);
             }
+            list.Add(endPosition[whichEnemy]);
             return list;
         }
         static Vector2 GetPoint(float t, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3)

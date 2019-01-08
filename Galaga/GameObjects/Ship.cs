@@ -18,19 +18,24 @@ namespace Galaga.GameObjects
         KeyboardState keyboardState;
         KeyboardState previousState;
 
-        Texture2D[] texture;
+        Texture2D texture;
         Rectangle screenRectangle;
         Rectangle location;
 
-        int textureIdx = 0;
+        public bool isLive = true;
+        public bool isDestroyed = false;
+
+        int destroyIdx = 0;
 
         public List<Bullet> bullets = new List<Bullet>();
+        public Rectangle Location { get => location; }
+        double elapsedTime = 0, timeToUpdate = 500;
 
-        public Ship(Texture2D[] texture, Rectangle screenRectangle)
+        public Ship(Texture2D texture, Rectangle screenRectangle)
         {
             this.texture = texture;
             this.screenRectangle = screenRectangle;
-            this.location = new Rectangle(0, 0, texture[0].Width, texture[0].Height);
+            this.location = new Rectangle(0, 0, texture.Width, texture.Height);
 
             SetInStartPosition();
         }
@@ -53,40 +58,67 @@ namespace Galaga.GameObjects
                 }
             }
 
-            if (keyboardState.IsKeyDown(Keys.Space) & !previousState.IsKeyDown(Keys.Space))
+            if (!isDestroyed && isLive)
             {
-                AddBullet(bullets);
+                if (keyboardState.IsKeyDown(Keys.Space) & !previousState.IsKeyDown(Keys.Space))
+                {
+                    AddBullet(bullets);
+                }
+
+                motion.X *= planeSpeedX;
+                position += motion;
+
+                location = new Rectangle(
+                    (int)position.X,
+                    (int)position.Y,
+                    texture.Width,
+                    texture.Height);
+
+                previousState = Keyboard.GetState();
             }
+            else if (isDestroyed && isLive)
+            {
+                elapsedTime += gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            motion.X *= planeSpeedX;
-            position += motion;
+                if (elapsedTime > timeToUpdate / 2)
+                {
+                    elapsedTime -= timeToUpdate / 2;
 
-            location = new Rectangle(
-                (int)position.X,
-                (int)position.Y,
-                texture[textureIdx].Width,
-                texture[textureIdx].Height);
-
-            previousState = Keyboard.GetState();
+                    if (destroyIdx < Game1.textureManager.shipDestroyed.Length - 1)
+                        destroyIdx++;
+                    else
+                        isLive = false;
+                }
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture[textureIdx], position, Color.White);
+            if (isLive)
+            {
+                if (!isDestroyed && isLive)
+                {
+                    spriteBatch.Draw(texture, location, Color.White);
+                }
+                else if (isDestroyed && isLive)
+                {
+                    spriteBatch.Draw(Game1.textureManager.shipDestroyed[destroyIdx], new Vector2(position.X - (Game1.textureManager.shipDestroyed[destroyIdx].Width / 2) + (texture.Width/2), position.Y - (Game1.textureManager.shipDestroyed[destroyIdx].Height / 2) + (texture.Height/2)), Color.White);
+                }
+            }
         }
 
         private void SetInStartPosition()
         {
-            position.X = (screenRectangle.Width - texture[textureIdx].Width) / 2;
+            position.X = (screenRectangle.Width - texture.Width) / 2;
             position.Y = (screenRectangle.Height - 150);
         }
-        public void AddBullet(List<Bullet> bullets)
+        private void AddBullet(List<Bullet> bullets)
         {
             var bullet = new Bullet(Game1.textureManager.bullet, new Rectangle(
-                location.X + (texture[textureIdx].Width / 2) - (Game1.textureManager.bullet.Width / 2),
-                location.Y - texture[textureIdx].Height,
-                texture[textureIdx].Width,
-                texture[textureIdx].Height)
+                location.X + (texture.Width / 2) - (Game1.textureManager.bullet.Width / 2),
+                location.Y - texture.Height,
+                texture.Width,
+                texture.Height)
                 );
 
             bullets.Add(bullet);
