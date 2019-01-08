@@ -63,6 +63,7 @@ namespace Galaga.GameObjects
                 if (keyboardState.IsKeyDown(Keys.Space) & !previousState.IsKeyDown(Keys.Space))
                 {
                     AddBullet(bullets);
+                    Game1.audioManager.shipFire.Play();
                 }
 
                 motion.X *= planeSpeedX;

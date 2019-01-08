@@ -70,6 +70,7 @@ namespace Galaga.Display
                     if (!enemy.isDestroyed && !bullet.isRemoved
                         && bullet.Location.Intersects(new Rectangle(enemy.Location.X - enemy.Location.Width / 2, enemy.Location.Y - enemy.Location.Height / 2, enemy.Location.Width, enemy.Location.Height)))
                     {
+                        Game1.audioManager.enemyHit.Play();
                         enemy.isDestroyed = true;
                         bullet.isRemoved = true;
                         switch (enemy.Name)
@@ -176,16 +177,22 @@ namespace Galaga.Display
             foreach (Enemy enemy in enemies)
             {
                 enemy.Update(theTime);
-                if (enemy.Location.Intersects(player.Location))
+                if (!enemy.isDestroyed && !player.isDestroyed 
+                    && enemy.Location.Intersects(player.Location))
                 {
-                    player.isDestroyed = true;                 
+                    Game1.audioManager.shipHit.Play();
+                    player.isDestroyed = true;
+                    Game1.audioManager.explosion.Play();
                 }
                 foreach (EnemyBullet bullet in enemy.enemyBullets)
                 {
                     bullet.Update(theTime);
-                    if (bullet.Location.Intersects(player.Location))
+                    if (!player.isDestroyed && !bullet.isRemoved 
+                        && bullet.Location.Intersects(player.Location))
                     {
+                        Game1.audioManager.shipHit.Play();
                         player.isDestroyed = true;
+                        Game1.audioManager.explosion.Play();
                     }
                 }
             }

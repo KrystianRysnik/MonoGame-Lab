@@ -13,6 +13,7 @@ namespace Galaga
     public class Game1 : Game
     {
         public static TextureManager textureManager;
+        public static AudioManager audioManager;
         public static int WIDTH, HEIGHT;
 
         GameScreen mGameScreen;
@@ -69,6 +70,7 @@ namespace Galaga
 
             // TODO: use this.Content to load your game content here
             textureManager = new TextureManager(this.Content);
+            audioManager = new AudioManager(this.Content);
 
             mGameScreen = new GameScreen(this.Content, screenRectangle, new EventHandler(GameScreenEvent));
             mTitleScreen = new TitleScreen(this.Content, screenRectangle, new EventHandler(TitleScreenEvent));

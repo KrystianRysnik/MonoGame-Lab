@@ -99,6 +99,7 @@ namespace Galaga.GameObjects
                 if (random.Next() % 12000 <= 2)
                 {
                     AddBullet(enemyBullets);
+                    Game1.audioManager.enemyFire.Play();
                 }
             }
             else if (isDestroyed && isLive)
