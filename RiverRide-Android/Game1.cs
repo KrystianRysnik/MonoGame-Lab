@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using RiverRide_Android.Display;
+using RiverRide_Android.Helpers;
 using System;
 
 namespace RiverRide_Android
@@ -12,6 +13,8 @@ namespace RiverRide_Android
     /// </summary>
     public class Game1 : Game
     {
+        public static TextureManager textureManager;
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -23,25 +26,28 @@ namespace RiverRide_Android
         Rectangle dst;
         public Rectangle screenRectangle;
 
-        public int WIDTH = 480, HEIGHT = 800;
+        public static float scaleX;
+        public static float scaleY;
+        public static Matrix scaleMatrix;
+        public static Viewport viewport;
+
+        public string contentRootDirectory;
+
+        public int WIDTH = 1280, HEIGHT = 720;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            contentRootDirectory = Content.RootDirectory;
 
             graphics.IsFullScreen = false;
-            graphics.PreferredBackBufferWidth = 480;
-            graphics.PreferredBackBufferHeight = 800;
-            //graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 720;
+            graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft;
             graphics.ApplyChanges();
 
             screenRectangle = new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-
-            TouchPanel.DisplayHeight = HEIGHT;
-            TouchPanel.DisplayWidth = WIDTH;
-            TouchPanel.EnabledGestures = GestureType.HorizontalDrag | GestureType.DragComplete | GestureType.VerticalDrag;
-            TouchPanel.EnableMouseTouchPoint = true;
         }
 
         /// <summary>
@@ -58,6 +64,14 @@ namespace RiverRide_Android
             renderTarget = new RenderTarget2D(graphics.GraphicsDevice, WIDTH, HEIGHT, false, SurfaceFormat.Color, DepthFormat.None, presentationParam.MultiSampleCount, RenderTargetUsage.DiscardContents); // RenderTargetUsage.PreserveContents
             dst = calculateAspectRectangle();
 
+            scaleX = (float)GraphicsDevice.Viewport.Width / WIDTH;
+            scaleY = (float)GraphicsDevice.Viewport.Height / HEIGHT;
+            scaleMatrix = Matrix.CreateScale(scaleX, scaleY, 1.0f);
+
+            viewport = GraphicsDevice.Viewport;
+
+            TouchPanel.EnabledGestures = GestureType.HorizontalDrag | GestureType.DragComplete | GestureType.VerticalDrag;
+
             base.Initialize();
         }
 
@@ -69,6 +83,8 @@ namespace RiverRide_Android
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            textureManager = new TextureManager(this.Content);
 
             // TODO: use this.Content to load your game content here
             mGameScreen = new GameScreen(screenRectangle, graphics, this.Content, new EventHandler(GameScreenEvent));
@@ -140,8 +156,7 @@ namespace RiverRide_Android
         }
         public void TitleScreenEvent(object obj, EventArgs e)
         {
-            if (mTitleScreen.touchSelect(screenRectangle))
-                mCurrentScreen = mGameScreen;
+            mCurrentScreen = mGameScreen;
         }
         protected Rectangle calculateAspectRectangle()
         {

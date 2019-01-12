@@ -17,7 +17,6 @@ namespace RiverRide_Android.Display
         Texture2D logo;
         TouchCollection touchCollection;
 
-
         public TitleScreen(Rectangle screenRectangle, ContentManager theContent, EventHandler theScreenEvent) : base(theScreenEvent)
         {
             this.screenRectangle = screenRectangle;
@@ -28,9 +27,13 @@ namespace RiverRide_Android.Display
         public override void Update(GameTime theTime)
         {
             touchCollection = TouchPanel.GetState();
-            if (touchSelect(screenRectangle))
+
+            foreach (var touch in touchCollection)
             {
-                ScreenEvent.Invoke(this, new EventArgs());
+                if (touch.State == TouchLocationState.Pressed)
+                {
+                    ScreenEvent.Invoke(this, new EventArgs());
+                }
             }
 
             base.Update(theTime);
@@ -40,21 +43,6 @@ namespace RiverRide_Android.Display
         {
             theBatch.Draw(logo, new Vector2((screenRectangle.Width - logo.Width)/2, (screenRectangle.Height - logo.Height)/2), Color.White);
             base.Draw(theBatch);
-        }
-        public bool touchSelect(Rectangle target)
-        {
-            foreach (TouchLocation tl in touchCollection)
-            {
-                if (tl.State == TouchLocationState.Released &&
-                tl.Position.X > target.Left &&
-                tl.Position.X < target.Right &&
-                tl.Position.Y > target.Top &&
-                tl.Position.Y < target.Bottom)
-                {
-                    return true;
-                }
-            }
-            return false;
         }
     }
 }

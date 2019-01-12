@@ -13,21 +13,24 @@ namespace RiverRide_Android.Display
     class GameScreen : Screen
     {
         Rectangle screenRectangle;
+
+        GameObjects.Plane player;
         HUD hud;
+        TextureAtlases textureAtlases;
 
         TouchCollection touchCollection;
         SpriteFont test;
-        bool eventValue = false;
                
         public GameScreen(Rectangle screenRectangle, GraphicsDeviceManager theGraphics, ContentManager theContent, EventHandler theScreenEvent) : base(theScreenEvent)
         {
             this.screenRectangle = screenRectangle;
-            Texture2D[] tempTexture = new Texture2D[2];
-            tempTexture[0] = theContent.Load<Texture2D>("Texture/fuel-level");
-            tempTexture[1] = theContent.Load<Texture2D>("Texture/hud-control");
+            player = new GameObjects.Plane(Game1.textureManager.plane, new Rectangle(0, 0, Game1.textureManager.plane[0].Width, Game1.textureManager.plane[0].Height));
+ 
             test = theContent.Load<SpriteFont>("Font/Test");
+            hud = new HUD(screenRectangle);
+            textureAtlases = new TextureAtlases(screenRectangle, Game1.textureManager.mapTiles, 50, 8);
             
-            hud = new HUD(tempTexture, theGraphics, screenRectangle);
+           // hud = new HUD(tempTexture, theGraphics, screenRectangle);
         }
 
         public override void Update(GameTime theTime)
@@ -40,14 +43,20 @@ namespace RiverRide_Android.Display
                 return;
             }
 
+            hud.Update(theTime);
+            player.Update(theTime);
 
-            eventValue = touchControl(hud.HudControlLocation);
+            foreach (Map map in textureAtlases.Maps)
+            {
+                map.Update();
 
+            }
         }
         public override void Draw(SpriteBatch theBatch)
         {
+            textureAtlases.Draw(theBatch);
             hud.Draw(theBatch);
-            theBatch.DrawString(test, "Event: " + eventValue, new Vector2(10, 10), Color.Black);
+            player.Draw(theBatch);
             base.Draw(theBatch);
         }
        
@@ -82,22 +91,14 @@ namespace RiverRide_Android.Display
             return false;
         }
 
-        public bool touchControl(Rectangle target)
+        public void StartGame()
         {
-            
-                foreach (TouchLocation tl in touchCollection)
-                {
-                    if ((tl.State == TouchLocationState.Released ||
-                    tl.State == TouchLocationState.Moved) &&
-                    tl.Position.X > target.Left && // 0
-                    tl.Position.X < target.Right && // < 1/3
-                    tl.Position.Y > target.Top && // 0
-                    tl.Position.Y < target.Bottom) // < 1/3
-                    {
-                        return true; 
-                    }
-                }
-                return false;
+            textureAtlases.SetInStartPosition();
+            player.SetInStartPosition();
+
+
+            isGameStarted = true;
+            isGameOver = false;
         }
     }
 }
