@@ -19,7 +19,7 @@ namespace RiverRide_Android.GameObjects
     {
         Vector2 position;
         Vector2 motion;
-        public float planeSpeedX = 6f;
+        public float planeSpeedX = 4f;
         public float planeSpeedY = 0;
 
         //  KeyboardState keyboardState;
@@ -92,16 +92,19 @@ namespace RiverRide_Android.GameObjects
             {
                 foreach (var touch in touchCollection)
                 {
-
                     Matrix tempMatrix = Matrix.Invert(Game1.scaleMatrix);
                     TouchLocation tempLocation = new TouchLocation(touch.Id, touch.State, Vector2.Transform(new Vector2(touch.Position.X + Game1.viewport.X, touch.Position.Y + Game1.viewport.Y), tempMatrix));
 
-                    if (HUD.leftMiddleBtn.buttonRectangle.Contains(tempLocation.Position))
+                    if (HUD.leftMiddleBtn.buttonRectangle.Contains(tempLocation.Position)
+                        || HUD.leftUpBtn.buttonRectangle.Contains(tempLocation.Position)
+                        || HUD.leftDownBtn.buttonRectangle.Contains(tempLocation.Position))
                     {
                         motion.X = -1;
                         status = 0;
                     }
-                    else if (HUD.rightMiddleBtn.buttonRectangle.Contains(tempLocation.Position))
+                    else if (HUD.rightMiddleBtn.buttonRectangle.Contains(tempLocation.Position)
+                        || HUD.rightUpBtn.buttonRectangle.Contains(tempLocation.Position)
+                        || HUD.rightDownBtn.buttonRectangle.Contains(tempLocation.Position))
                     {
                         motion.X = 1;
                         status = 2;

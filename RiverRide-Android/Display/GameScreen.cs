@@ -28,7 +28,7 @@ namespace RiverRide_Android.Display
  
             test = theContent.Load<SpriteFont>("Font/Test");
             hud = new HUD(screenRectangle);
-            textureAtlases = new TextureAtlases(screenRectangle, Game1.textureManager.mapTiles, 50, 8);
+            textureAtlases = new TextureAtlases(screenRectangle, 50, 8);
             
            // hud = new HUD(tempTexture, theGraphics, screenRectangle);
         }

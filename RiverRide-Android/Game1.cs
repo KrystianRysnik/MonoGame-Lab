@@ -157,6 +157,7 @@ namespace RiverRide_Android
         public void TitleScreenEvent(object obj, EventArgs e)
         {
             mCurrentScreen = mGameScreen;
+            mGameScreen.StartGame();
         }
         protected Rectangle calculateAspectRectangle()
         {

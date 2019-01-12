@@ -14,17 +14,14 @@ namespace RiverRide_Android
     {
         Game1 g = new Game1();
         public Texture2D[] Texture { get; set; }
-        public Texture2D[] HeliTexture { get; set; }
-        public Texture2D ShipTexture { get; set; }
-        public Texture2D FuelTexture { get; set; }
         public int Rows { get; set; }
         public int Columns { get; set; }
         public Map[,] Maps { get; set; }
         public Rectangle ScreenRectangle { get; set; }
 
-        public TextureAtlases(Rectangle screenRectangle, Texture2D[] texture, int rows, int cols)
+        public TextureAtlases(Rectangle screenRectangle, int rows, int cols)
         {
-            Texture = texture;
+            Texture = Game1.textureManager.mapTiles;
             ScreenRectangle = screenRectangle;
             Rows = rows;
             Columns = cols;
