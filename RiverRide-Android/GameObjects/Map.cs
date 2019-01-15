@@ -69,7 +69,7 @@ namespace RiverRide_Android.GameObjects
                      || HUD.upBtn.buttonRectangle.Contains(tempLocation.Position)
                      || HUD.rightUpBtn.buttonRectangle.Contains(tempLocation.Position))
                     {
-                        location.Y += 4;
+                        location.Y += 3;
                     }
                     else if (HUD.leftDownBtn.buttonRectangle.Contains(tempLocation.Position)
                         || HUD.downBtn.buttonRectangle.Contains(tempLocation.Position)

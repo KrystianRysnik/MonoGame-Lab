@@ -15,7 +15,7 @@ namespace RiverRide_Android
     {
         public static TextureManager textureManager;
 
-        GraphicsDeviceManager graphics;
+        public static GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
         GameScreen mGameScreen;

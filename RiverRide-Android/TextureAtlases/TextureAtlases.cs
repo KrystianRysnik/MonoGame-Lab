@@ -19,6 +19,10 @@ namespace RiverRide_Android
         public Map[,] Maps { get; set; }
         public Rectangle ScreenRectangle { get; set; }
 
+        public List<Heli> helis = new List<Heli>();
+        public List<Ship> ships = new List<Ship>();
+        public List<Fuel> fuels = new List<Fuel>();
+
         public TextureAtlases(Rectangle screenRectangle, int rows, int cols)
         {
             Texture = Game1.textureManager.mapTiles;
@@ -48,22 +52,25 @@ namespace RiverRide_Android
         {
             foreach (Map map in Maps)
                 map.Draw(spriteBatch);
-            //foreach (Heli heli in helis)
-            //    if (heli.Location.Y <= ScreenRectangle.Height && heli.Location.Y >= -heli.Location.Height)
-            //        heli.Draw(spriteBatch);
-            //foreach (Ship ship in ships)
-            //    if (ship.Location.Y <= ScreenRectangle.Height && ship.Location.Y >= -ship.Location.Height)
-            //        ship.Draw(spriteBatch);
-            //foreach (Fuel fuel in fuels)
-            //    if (fuel.Location.Y <= ScreenRectangle.Height && fuel.Location.Y >= -fuel.Location.Height)
-            //        fuel.Draw(spriteBatch);
+            foreach (Heli heli in helis)
+                if (heli.Location.Y <= ScreenRectangle.Height && heli.Location.Y >= -heli.Location.Height)
+                    heli.Draw(spriteBatch);
+            foreach (Ship ship in ships)
+                if (ship.Location.Y <= ScreenRectangle.Height && ship.Location.Y >= -ship.Location.Height)
+                    ship.Draw(spriteBatch);
+            foreach (Fuel fuel in fuels)
+                if (fuel.Location.Y <= ScreenRectangle.Height && fuel.Location.Y >= -fuel.Location.Height)
+                    fuel.Draw(spriteBatch);
         }
 
         public void addMapTile(int x, int y, int n)
         {
+
+            int posX = (x - 4) * Texture[n].Width + ScreenRectangle.Width / 2;
+        
             Maps[x, y] = new Map(Texture[n],
                            new Rectangle(
-                               x * Texture[n].Width,
+                               posX,
                                -y * Texture[n].Height + ScreenRectangle.Height - 38,
                                Texture[n].Width,
                                Texture[n].Height),

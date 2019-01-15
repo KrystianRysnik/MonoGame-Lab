@@ -28,6 +28,7 @@ namespace RiverRide_Android.Helpers
 
         // Player
         public Texture2D[] plane;
+        public Texture2D bullet;
 
         // Map Tiles
         public Texture2D[] mapTiles;
@@ -56,6 +57,7 @@ namespace RiverRide_Android.Helpers
                 theContent.Load<Texture2D>("Texture/plane"),
                 theContent.Load<Texture2D>("Texture/plane-right")            
             };
+            bullet = theContent.Load<Texture2D>("Texture/bullet");
 
             // Map Tiles
             mapTiles = new Texture2D[8]

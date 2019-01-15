@@ -29,17 +29,15 @@ namespace RiverRide_Android.GameObjects
         public static TouchButton leftDownBtn;
         public static TouchButton downBtn;
         public static TouchButton rightDownBtn;
+        public static TouchButton fireBtn;
+
+        Texture2D bgHud;
 
         public HUD(Rectangle screenRectangle)
         {
             this.screenRectangle = screenRectangle;
 
-            // Background for HUD
-            //  bgHud = new Texture2D(graphics.GraphicsDevice, screenRectangle.Width, 200);
-            //   Color[] data = new Color[screenRectangle.Width * 200];
-            //   for (int i = 0; i < data.Length; ++i)
-            //      data[i] = new Color(142, 142, 142);
-            // bgHud.SetData(data);
+          
 
             leftUpBtn = new TouchButton("leftUp", Game1.textureManager.leftUp, new Vector2(10, this.screenRectangle.Height - 3 * Game1.textureManager.leftUp.Height - 10));
             upBtn = new TouchButton("up", Game1.textureManager.up, new Vector2(10 + Game1.textureManager.up.Width, this.screenRectangle.Height - 3 * Game1.textureManager.up.Height - 10));
@@ -52,6 +50,9 @@ namespace RiverRide_Android.GameObjects
             downBtn = new TouchButton("down", Game1.textureManager.down, new Vector2(10 + Game1.textureManager.down.Width, this.screenRectangle.Height - Game1.textureManager.down.Height - 10));
             rightDownBtn = new TouchButton("rightDown", Game1.textureManager.rightDown, new Vector2(10 + Game1.textureManager.rightDown.Width * 2, this.screenRectangle.Height - Game1.textureManager.rightDown.Height - 10));
 
+            // Background for HUD
+            bgHud = new Texture2D(Game1.graphics.GraphicsDevice, screenRectangle.Width / 2, screenRectangle.Height);
+            fireBtn = new TouchButton("fireBtn", bgHud, new Vector2(screenRectangle.Width / 2, 0));
         }
 
         public void Update(GameTime gameTime)
@@ -72,6 +73,8 @@ namespace RiverRide_Android.GameObjects
             leftDownBtn.Draw(spriteBatch);
             downBtn.Draw(spriteBatch);
             rightDownBtn.Draw(spriteBatch);
+
+            fireBtn.Draw(spriteBatch);
         }
     }
 }

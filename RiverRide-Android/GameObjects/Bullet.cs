@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RiverRideAndroid.GameObjects
+namespace RiverRide_Android.GameObjects
 {
     class Bullet
     {
@@ -25,7 +25,7 @@ namespace RiverRideAndroid.GameObjects
 
         public Bullet(Rectangle location)
         {
-            this.texture = Game1.;
+            this.texture = Game1.textureManager.bullet;
             this.location = location;
             this.position = new Vector2(location.X, location.Y);
         }

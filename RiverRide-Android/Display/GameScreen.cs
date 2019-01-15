@@ -24,32 +24,96 @@ namespace RiverRide_Android.Display
         public GameScreen(Rectangle screenRectangle, GraphicsDeviceManager theGraphics, ContentManager theContent, EventHandler theScreenEvent) : base(theScreenEvent)
         {
             this.screenRectangle = screenRectangle;
-            player = new GameObjects.Plane(Game1.textureManager.plane, new Rectangle(0, 0, Game1.textureManager.plane[0].Width, Game1.textureManager.plane[0].Height));
+            player = new GameObjects.Plane(Game1.textureManager.plane, screenRectangle);
  
             test = theContent.Load<SpriteFont>("Font/Test");
             hud = new HUD(screenRectangle);
             textureAtlases = new TextureAtlases(screenRectangle, 50, 8);
-            
-           // hud = new HUD(tempTexture, theGraphics, screenRectangle);
         }
 
         public override void Update(GameTime theTime)
         {
-            touchCollection = TouchPanel.GetState();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.P) || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (!isGameOver)
             {
-                ScreenEvent.Invoke(this, new EventArgs());
-                return;
-            }
+                foreach (Heli heli in textureAtlases.helis)
+                {
+                    if (heli.isLive)
+                    {
+                        heli.Update(theTime);
+                        if (player.Location.Intersects(heli.Location))
+                            isGameOver = true;
+                    }
+                }
 
-            hud.Update(theTime);
-            player.Update(theTime);
+                foreach (Ship ship in textureAtlases.ships)
+                {
+                    if (ship.isLive)
+                    {
+                        ship.Update(theTime);
+                        if (player.Location.Intersects(ship.Location))
+                            isGameOver = true;
+                    }
+                }
 
-            foreach (Map map in textureAtlases.Maps)
-            {
-                map.Update();
+                foreach (Fuel fuel in textureAtlases.fuels)
+                {
+                    if (fuel.isLive)
+                    {
+                        fuel.Update(theTime);
+                        if (player.Location.Intersects(fuel.Location))
+                        {
+                            fuel.isLive = false;
+                            if (player.Fuel + 20 >= 100)
+                                player.Fuel = 100;
+                            else
+                                player.Fuel += 20;
+                        }
 
+                    }
+                }
+
+                foreach (Bullet bullet in player.bullets)
+                {
+                    bullet.Update(theTime);
+                    foreach (Heli heli in textureAtlases.helis)
+                    {
+                        if (heli.isLive && !bullet.isRemoved && bullet.Location.Intersects(heli.Location))
+                        {
+                            heli.isLive = false;
+                            bullet.isRemoved = true;
+                        }
+                    }
+                    foreach (Ship ship in textureAtlases.ships)
+                    {
+                        if (ship.isLive && !bullet.isRemoved && bullet.Location.Intersects(ship.Location))
+                        {
+                            ship.isLive = false;
+                            bullet.isRemoved = true;
+                        }
+                    }
+                    foreach (Fuel fuel in textureAtlases.fuels)
+                    {
+                        if (fuel.isLive && !bullet.isRemoved && bullet.Location.Intersects(fuel.Location))
+                        {
+                            fuel.isLive = false;
+                            bullet.isRemoved = true;
+                        }
+                    }
+                }
+
+
+                player.Update(theTime);
+
+                foreach (Map map in textureAtlases.Maps)
+                {
+                    map.Update();
+                    //Console.WriteLine(textureAtlases.Maps[0,0].Location);
+                    //Console.WriteLine(plane.Location);
+                    if (map.Location.Y <= 720 - map.Location.Height && map.Location.Y >= 720 - 2 * map.Location.Height)
+                        if (IntersectsPixel(player.Location, player.TextureData, map.Location, map.TextureData))
+                            isGameOver = true;
+                }
             }
         }
         public override void Draw(SpriteBatch theBatch)
@@ -57,6 +121,11 @@ namespace RiverRide_Android.Display
             textureAtlases.Draw(theBatch);
             hud.Draw(theBatch);
             player.Draw(theBatch);
+            foreach (Bullet bullet in player.bullets)
+            { 
+               bullet.Draw(theBatch);
+            }
+
             base.Draw(theBatch);
         }
        
@@ -95,8 +164,7 @@ namespace RiverRide_Android.Display
         {
             textureAtlases.SetInStartPosition();
             player.SetInStartPosition();
-
-
+     
             isGameStarted = true;
             isGameOver = false;
         }

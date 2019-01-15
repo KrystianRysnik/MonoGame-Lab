@@ -19,8 +19,8 @@ namespace RiverRide_Android.GameObjects
     {
         Vector2 position;
         Vector2 motion;
-        public float planeSpeedX = 4f;
-        public float planeSpeedY = 0;
+        float planeSpeedX = 3f;
+        float fireCooldown = 0.3f;
 
         //  KeyboardState keyboardState;
         //   KeyboardState previousState;
@@ -32,7 +32,7 @@ namespace RiverRide_Android.GameObjects
         Rectangle screenRectangle;
         Rectangle location;
 
-        //public List<Bullet> bullets = new List<Bullet>();
+        public List<Bullet> bullets = new List<Bullet>();
         public Rectangle Location { get { return location; } }
 
         public Rectangle ScreenBounds { get; }
@@ -50,8 +50,8 @@ namespace RiverRide_Android.GameObjects
             this.texture = texture;
             this.screenRectangle = screenRectangle;
             this.location = new Rectangle(
-                            texture[1].Width,
-                            texture[1].Height,
+                            0,
+                            0,
                             texture[1].Width,
                             texture[1].Height);
             this.textureData = new Color[texture[1].Width * texture[1].Height];
@@ -87,7 +87,10 @@ namespace RiverRide_Android.GameObjects
              }*/
 
             touchCollection = TouchPanel.GetState();
-
+            if (fireCooldown > 0)
+            {
+                fireCooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
             if (touchCollection.Count > 0)
             {
                 foreach (var touch in touchCollection)
@@ -113,6 +116,13 @@ namespace RiverRide_Android.GameObjects
                     {
                         status = 1;
                     }
+
+                    //  if (touchCollection[0].State == TouchLocationState.Moved || touchCollection[0].State == TouchLocationState.Pressed)
+                    if (HUD.fireBtn.buttonRectangle.Contains(tempLocation.Position) && (touch.State == TouchLocationState.Moved || touch.State == TouchLocationState.Pressed) && fireCooldown <= 0)
+                    {
+                        AddBullet(bullets);
+                        fireCooldown = 0.3f;
+                    }
                 }
             }
             else
@@ -121,7 +131,6 @@ namespace RiverRide_Android.GameObjects
             }
 
             motion.X *= planeSpeedX;
-            motion.Y = planeSpeedY;
             position += motion;
 
             location = new Rectangle(
@@ -144,7 +153,7 @@ namespace RiverRide_Android.GameObjects
         public void SetInStartPosition()
         {
             position.X = (screenRectangle.Width - texture[1].Width) / 2;
-            position.Y = screenRectangle.Height - texture[1].Height - 5;
+            position.Y = screenRectangle.Height - 185;
             Fuel = 100;
         }
         public void Draw(SpriteBatch spriteBatch)
@@ -152,16 +161,16 @@ namespace RiverRide_Android.GameObjects
             spriteBatch.Draw(texture[status], position, Color.White);
         }
 
-      /*  public void AddBullet(List<Bullet> bullets)
+        public void AddBullet(List<Bullet> bullets)
         {
-            var bullet = new Bullet(texture[3], new Rectangle(
-                Location.X + (texture[1].Width / 2) - (texture[3].Width / 2),
-                Location.Y - texture[3].Height,
-                texture[3].Width,
-                texture[3].Height)
+            var bullet = new Bullet(new Rectangle(
+                Location.X + (Game1.textureManager.plane[1].Width - Game1.textureManager.bullet.Width) / 2,
+                Location.Y - Game1.textureManager.bullet.Height,
+                texture[1].Width,
+                texture[1].Height)
                 );
 
             bullets.Add(bullet);
-        }*/
+        }
     }
 }

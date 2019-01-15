@@ -62,7 +62,11 @@
     <Compile Include="Display\Screen.cs" />
     <Compile Include="Display\TitleScreen.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="GameObjects\Bullet.cs" />
+    <Compile Include="GameObjects\Fuel.cs" />
+    <Compile Include="GameObjects\Heli.cs" />
     <Compile Include="GameObjects\Plane.cs" />
+    <Compile Include="GameObjects\Ship.cs" />
     <Compile Include="GameObjects\TouchButton.cs" />
     <Compile Include="GameObjects\HUD.cs" />
     <Compile Include="Helpers\TextureManager.cs" />
