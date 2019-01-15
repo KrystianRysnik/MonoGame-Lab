@@ -16,6 +16,9 @@ namespace RiverRide_Android.Helpers
 {
     public class TextureManager
     {
+        // GUI
+        public Texture2D gameOver;
+
         // Controls
         public Texture2D leftUp;
         public Texture2D up;
@@ -29,9 +32,21 @@ namespace RiverRide_Android.Helpers
         // Player
         public Texture2D[] plane;
         public Texture2D bullet;
+        public Texture2D fuel;
+
+        // Heli
+        public Texture2D[] heli;
+
+        // Ship
+        public Texture2D ship;
 
         // Map Tiles
         public Texture2D[] mapTiles;
+
+        // Fuel HUD
+        public Texture2D fuelLevel;
+        public Texture2D fuelPointer;
+        
 
         public TextureManager(ContentManager theContent)
         {
@@ -40,6 +55,9 @@ namespace RiverRide_Android.Helpers
 
         private void loadTextures(ContentManager theContent)
         {
+            // GUI
+            gameOver = theContent.Load<Texture2D>("Image/gameover");
+
             // Controls
             leftUp = theContent.Load<Texture2D>("Texture/left-up");
             up = theContent.Load<Texture2D>("Texture/up");
@@ -58,6 +76,17 @@ namespace RiverRide_Android.Helpers
                 theContent.Load<Texture2D>("Texture/plane-right")            
             };
             bullet = theContent.Load<Texture2D>("Texture/bullet");
+            fuel = theContent.Load<Texture2D>("Texture/fuel");
+
+            // Heli
+            heli = new Texture2D[2]
+            {
+                theContent.Load<Texture2D>("Texture/heli-0"),
+                theContent.Load<Texture2D>("Texture/heli-1")
+            };
+
+            // Ship
+            ship = theContent.Load<Texture2D>("Texture/ship");
 
             // Map Tiles
             mapTiles = new Texture2D[8]
@@ -71,6 +100,11 @@ namespace RiverRide_Android.Helpers
                 theContent.Load<Texture2D>("Texture/map-6"),
                 theContent.Load<Texture2D>("Texture/map-7")
             };
+
+            // Fuel HUD
+            fuelLevel = theContent.Load<Texture2D>("Texture/fuel-level");
+            fuelPointer = theContent.Load<Texture2D>("Texture/fuel-pointer");
+            
         }
     }
 }

@@ -145,7 +145,7 @@ namespace RiverRide_Android.GameObjects
             {
                 elapsedTime -= timeToUpdate;
 
-                Fuel -= (float)0.6;
+                Fuel -= (float)0.006f;
             }
 
            // previousState = Keyboard.GetState();
@@ -153,8 +153,8 @@ namespace RiverRide_Android.GameObjects
         public void SetInStartPosition()
         {
             position.X = (screenRectangle.Width - texture[1].Width) / 2;
-            position.Y = screenRectangle.Height - 185;
-            Fuel = 100;
+            position.Y = screenRectangle.Height - 220;
+            Fuel = 1;
         }
         public void Draw(SpriteBatch spriteBatch)
         {
@@ -164,7 +164,7 @@ namespace RiverRide_Android.GameObjects
         public void AddBullet(List<Bullet> bullets)
         {
             var bullet = new Bullet(new Rectangle(
-                Location.X + (Game1.textureManager.plane[1].Width - Game1.textureManager.bullet.Width) / 2,
+                Location.X + (texture[1].Width - Game1.textureManager.bullet.Width) / 2,
                 Location.Y - Game1.textureManager.bullet.Height,
                 texture[1].Width,
                 texture[1].Height)

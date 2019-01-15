@@ -26,7 +26,7 @@ namespace RiverRide_Android.GameObjects
             this.name = name;
             this.pos = pos;
             this.texture = texture;
-            buttonRectangle = new Rectangle((int)this.pos.X, (int)this.pos.Y, texture.Width, texture.Height);
+            buttonRectangle = new Rectangle((int)pos.X, (int)pos.Y, texture.Width, texture.Height);
         }
 
         public void Draw(SpriteBatch theBatch)

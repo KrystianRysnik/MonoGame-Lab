@@ -22,7 +22,7 @@ namespace RiverRide_Android
         public List<Heli> helis = new List<Heli>();
         public List<Ship> ships = new List<Ship>();
         public List<Fuel> fuels = new List<Fuel>();
-
+        
         public TextureAtlases(Rectangle screenRectangle, int rows, int cols)
         {
             Texture = Game1.textureManager.mapTiles;
@@ -43,7 +43,22 @@ namespace RiverRide_Android
                 for (int x = 0; x < Columns; x++)
                 {
                     int n = line[x] - '0';
-                    addMapTile(x, y, n);
+                    if (n == 24 || n == 35 || n == 22)
+                    {
+                        int temp = n;
+                        n = 7;
+                        addMapTile(x, y, n);
+                        if (temp == 24)
+                            addHeli(helis, x, y, n);
+                        if (temp == 35)
+                            addShip(ships, x, y, n);
+                        if (temp == 22)
+                            addFuel(fuels, x, y, n);
+                    }
+                    else
+                    {
+                        addMapTile(x, y, n);
+                    }
                 }
             }
         }
@@ -63,7 +78,7 @@ namespace RiverRide_Android
                     fuel.Draw(spriteBatch);
         }
 
-        public void addMapTile(int x, int y, int n)
+        private void addMapTile(int x, int y, int n)
         {
 
             int posX = (x - 4) * Texture[n].Width + ScreenRectangle.Width / 2;
@@ -77,7 +92,49 @@ namespace RiverRide_Android
                            Color.White);
         }
 
-        public static string[] ReadAllTextLinesFromFile(string filePath)
+        private void addHeli(List<Heli> helis, int x, int y, int n)
+        {
+            int posX = (x - 4) * Texture[n].Width + ScreenRectangle.Width / 2;
+
+            var heli = new Heli(Game1.textureManager.heli, new Rectangle(
+                          posX,
+                          -y * Texture[n].Height + 720 - 96,
+                          Game1.textureManager.heli[0].Width,
+                          Game1.textureManager.heli[0].Height)
+                          );
+
+            helis.Add(heli);
+        }
+
+        private void addShip(List<Ship> ships, int x, int y, int n)
+        {
+            int posX = (x - 4) * Texture[n].Width + ScreenRectangle.Width / 2;
+
+            var ship = new Ship(Game1.textureManager.ship, new Rectangle(
+                          posX,
+                          -y * Texture[n].Height + 720 - 96,
+                          Game1.textureManager.ship.Width,
+                          Game1.textureManager.ship.Height)
+                          );
+
+            ships.Add(ship);
+        }
+
+        private void addFuel(List<Fuel> fuels, int x, int y, int n)
+        {
+            int posX = (x - 4) * Texture[n].Width + ScreenRectangle.Width / 2;
+
+            var fuel = new Fuel(Game1.textureManager.fuel, new Rectangle(
+                          posX,
+                          -y * Texture[n].Height + 720 - 96,
+                          Game1.textureManager.fuel.Width,
+                          Game1.textureManager.fuel.Height)
+                          );
+
+            fuels.Add(fuel);
+        }
+
+        private static string[] ReadAllTextLinesFromFile(string filePath)
         {
             string[] mResult = null;
             using (var mFs = TitleContainer.OpenStream(filePath))

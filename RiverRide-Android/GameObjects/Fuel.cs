@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,16 +12,12 @@ namespace RiverRide_Android.GameObjects
 {
     class Fuel
     {
-        Vector2 position;
         Texture2D texture;
-
         Rectangle location;
-
-        public List<Bullet> bullets = new List<Bullet>();
+        public bool isLive = true;
         public Rectangle Location { get { return location; } }
 
-        KeyboardState keyboardState;
-        public bool isLive = true;
+        TouchCollection touchCollection;
 
         public Fuel(Texture2D texture, Rectangle location)
         {
@@ -34,26 +31,42 @@ namespace RiverRide_Android.GameObjects
 
         public void Update(GameTime gameTime)
         {
-            keyboardState = Keyboard.GetState();
+            touchCollection = TouchPanel.GetState();
 
-            if (keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.Down))
+            if (touchCollection.Count > 0)
             {
-                if (keyboardState.IsKeyDown(Keys.Up))
+                foreach (var touch in touchCollection)
                 {
-                    location.Y += 4;
-                }
-                if (keyboardState.IsKeyDown(Keys.Down))
-                {
-                    location.Y += 1;
+                    Matrix tempMatrix = Matrix.Invert(Game1.scaleMatrix);
+                    TouchLocation tempLocation = new TouchLocation(touch.Id, touch.State, Vector2.Transform(new Vector2(touch.Position.X + Game1.viewport.X, touch.Position.Y + Game1.viewport.Y), tempMatrix));
+
+                    if (HUD.leftUpBtn.buttonRectangle.Contains(tempLocation.Position)
+                     || HUD.upBtn.buttonRectangle.Contains(tempLocation.Position)
+                     || HUD.rightUpBtn.buttonRectangle.Contains(tempLocation.Position))
+                    {
+                        location.Y += 3;
+                    }
+                    else if (HUD.leftDownBtn.buttonRectangle.Contains(tempLocation.Position)
+                        || HUD.downBtn.buttonRectangle.Contains(tempLocation.Position)
+                        || HUD.rightDownBtn.buttonRectangle.Contains(tempLocation.Position))
+                    {
+                        location.Y += 1;
+                    }
+                    else
+                    {
+                        location.Y += 2;
+                    }
                 }
             }
-            else location.Y += 2;
+            else
+            {
+                location.Y += 2;
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            if (isLive)
-                    spriteBatch.Draw(texture, Location, Color.White);
+            spriteBatch.Draw(texture, Location, Color.White);
         }
     }
 }

@@ -19,8 +19,6 @@ namespace RiverRide_Android.GameObjects
     {
         Rectangle screenRectangle;
 
-        //Texture2D bgHud;
-
         public static TouchButton leftUpBtn;
         public static TouchButton upBtn;
         public static TouchButton rightUpBtn;
@@ -31,13 +29,16 @@ namespace RiverRide_Android.GameObjects
         public static TouchButton rightDownBtn;
         public static TouchButton fireBtn;
 
-        Texture2D bgHud;
+        Color[] data;
+        Texture2D fireTexture;
+        Texture2D hudBackground;
+        Texture2D waterBackground;
+
+        public Texture2D WaterBackground { get => waterBackground; }
 
         public HUD(Rectangle screenRectangle)
         {
             this.screenRectangle = screenRectangle;
-
-          
 
             leftUpBtn = new TouchButton("leftUp", Game1.textureManager.leftUp, new Vector2(10, this.screenRectangle.Height - 3 * Game1.textureManager.leftUp.Height - 10));
             upBtn = new TouchButton("up", Game1.textureManager.up, new Vector2(10 + Game1.textureManager.up.Width, this.screenRectangle.Height - 3 * Game1.textureManager.up.Height - 10));
@@ -50,19 +51,31 @@ namespace RiverRide_Android.GameObjects
             downBtn = new TouchButton("down", Game1.textureManager.down, new Vector2(10 + Game1.textureManager.down.Width, this.screenRectangle.Height - Game1.textureManager.down.Height - 10));
             rightDownBtn = new TouchButton("rightDown", Game1.textureManager.rightDown, new Vector2(10 + Game1.textureManager.rightDown.Width * 2, this.screenRectangle.Height - Game1.textureManager.rightDown.Height - 10));
 
+            fireTexture = new Texture2D(Game1.graphics.GraphicsDevice, screenRectangle.Width / 2, screenRectangle.Height);
+            fireBtn = new TouchButton("fireBtn", fireTexture, new Vector2(screenRectangle.Width / 2, 0));
+
             // Background for HUD
-            bgHud = new Texture2D(Game1.graphics.GraphicsDevice, screenRectangle.Width / 2, screenRectangle.Height);
-            fireBtn = new TouchButton("fireBtn", bgHud, new Vector2(screenRectangle.Width / 2, 0));
+            hudBackground = new Texture2D(Game1.graphics.GraphicsDevice, screenRectangle.Width, 180);
+            data = new Color[screenRectangle.Width * 180];
+            for (int i = 0; i < data.Length; ++i)
+                data[i] = new Color(142, 142, 142);
+            hudBackground.SetData(data);
+
+            waterBackground = new Texture2D(Game1.graphics.GraphicsDevice, Game1.textureManager.mapTiles[0].Width * 6, screenRectangle.Height);
+            data = new Color[Game1.textureManager.mapTiles[0].Width * 6 * screenRectangle.Height];
+            for (int i = 0; i < data.Length; ++i)
+                data[i] = new Color(45, 50, 184);
+            waterBackground.SetData(data);
         }
 
         public void Update(GameTime gameTime)
         {
-       
+            
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            //spriteBatch.Draw(bgHud, new Vector2(0, screenRectangle.Height - bgHud.Height), Color.White);
+            spriteBatch.Draw(hudBackground, new Vector2(0, screenRectangle.Height - hudBackground.Height), Color.White);
             leftUpBtn.Draw(spriteBatch);
             upBtn.Draw(spriteBatch);
             rightUpBtn.Draw(spriteBatch);

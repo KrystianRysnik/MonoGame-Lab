@@ -13,12 +13,27 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Font/Test.spritefont
+#begin Font/DOS.ttf
+/copy:Font/DOS.ttf
+
+#begin Font/DOS_Font.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:Font/Test.spritefont
+/build:Font/DOS_Font.spritefont
+
+#begin Image/gameover.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Image/gameover.png
 
 #begin Image/start.png
 /importer:TextureImporter
@@ -59,6 +74,18 @@
 /processorParam:TextureFormat=Color
 /build:Texture/down.png
 
+#begin Texture/fuel.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Texture/fuel.png
+
 #begin Texture/fuel-level.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -71,7 +98,7 @@
 /processorParam:TextureFormat=Color
 /build:Texture/fuel-level.png
 
-#begin Texture/hud-control.png
+#begin Texture/fuel-pointer.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -81,7 +108,31 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Texture/hud-control.png
+/build:Texture/fuel-pointer.png
+
+#begin Texture/heli-0.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Texture/heli-0.png
+
+#begin Texture/heli-1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Texture/heli-1.png
 
 #begin Texture/left-down.png
 /importer:TextureImporter
@@ -286,6 +337,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Texture/right-up.png
+
+#begin Texture/ship.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Texture/ship.png
 
 #begin Texture/up.png
 /importer:TextureImporter

@@ -123,7 +123,7 @@ namespace RiverRide_Android
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.SetRenderTarget(renderTarget);
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(new Color(110, 156, 66));
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
@@ -131,7 +131,7 @@ namespace RiverRide_Android
             spriteBatch.End();
 
             GraphicsDevice.SetRenderTarget(null);
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(new Color(110, 156, 66));
 
             spriteBatch.Begin();
             spriteBatch.Draw(renderTarget, dst, Color.White);
@@ -159,6 +159,7 @@ namespace RiverRide_Android
             mCurrentScreen = mGameScreen;
             mGameScreen.StartGame();
         }
+
         protected Rectangle calculateAspectRectangle()
         {
             Rectangle dst = new Rectangle();
