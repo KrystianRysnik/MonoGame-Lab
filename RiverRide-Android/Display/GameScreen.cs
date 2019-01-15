@@ -31,6 +31,7 @@ namespace RiverRide_Android.Display
 
         public override void Update(GameTime theTime)
         {
+            touchCollection = TouchPanel.GetState();
 
             if (!isGameOver)
             {
@@ -58,7 +59,8 @@ namespace RiverRide_Android.Display
                         Matrix tempMatrix = Matrix.Invert(Game1.scaleMatrix);
                         TouchLocation tempLocation = new TouchLocation(touch.Id, touch.State, Vector2.Transform(new Vector2(touch.Position.X + Game1.viewport.X, touch.Position.Y + Game1.viewport.Y), tempMatrix));
 
-                        if (hud.WaterBackground.Bounds.Contains(tempLocation.Position))
+                        //  if (touchCollection[0].State == TouchLocationState.Moved || touchCollection[0].State == TouchLocationState.Pressed)
+                        if (HUD.fireBtn.buttonRectangle.Contains(tempLocation.Position) && (touch.State == TouchLocationState.Moved || touch.State == TouchLocationState.Pressed))
                         {
                             StartGame();
                         }
@@ -119,7 +121,9 @@ namespace RiverRide_Android.Display
 
         public void StartGame()
         {
-           
+            textureAtlases.helis.Clear();
+            textureAtlases.ships.Clear();
+            player.bullets.Clear();
             textureAtlases.SetInStartPosition();
             player.SetInStartPosition();
      

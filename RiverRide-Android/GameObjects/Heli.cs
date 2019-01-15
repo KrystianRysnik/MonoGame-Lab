@@ -81,7 +81,7 @@ namespace RiverRide_Android.GameObjects
                 location.Y += 2;
             }
 
-            if (right == true && startPositionX + 256 >= Location.X)
+            if (right == true && startPositionX + 128 >= Location.X)
                 location.X += 3;
             else
                 right = false;
