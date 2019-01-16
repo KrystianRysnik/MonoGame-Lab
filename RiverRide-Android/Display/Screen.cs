@@ -14,6 +14,7 @@ namespace RiverRide_Android.Display
         protected EventHandler ScreenEvent;
         public static bool isGameStarted = false;
         public static bool isGameOver = false;
+        public static int score;
  
         public Screen(EventHandler theScreenEvent)
         {

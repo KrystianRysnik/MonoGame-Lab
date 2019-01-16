@@ -17,6 +17,7 @@ namespace RiverRide_Android.Display
         GameObjects.Plane player;
         HUD hud;
         public TextureAtlases textureAtlases;
+        SpriteFont dosFont;
 
         TouchCollection touchCollection;
                
@@ -27,6 +28,8 @@ namespace RiverRide_Android.Display
  
             hud = new HUD(screenRectangle);
             textureAtlases = new TextureAtlases(screenRectangle, 50, 8);
+
+            dosFont = theContent.Load<SpriteFont>("Font/DOS_Font");
         }
 
         public override void Update(GameTime theTime)
@@ -81,6 +84,7 @@ namespace RiverRide_Android.Display
             }
             theBatch.Draw(Game1.textureManager.fuelPointer, new Vector2((screenRectangle.Width - Game1.textureManager.fuelLevel.Width) / 2 + 10 + (player.Fuel * (354 - 19)), screenRectangle.Height - 111), Color.White);
             theBatch.Draw(Game1.textureManager.fuelLevel, new Vector2((screenRectangle.Width - Game1.textureManager.fuelLevel.Width) / 2, screenRectangle.Height - Game1.textureManager.fuelLevel.Height - 10), Color.White);
+            theBatch.DrawString(dosFont, "" + score, new Vector2((screenRectangle.Width - dosFont.Texture.Width) / 2, screenRectangle.Height - Game1.textureManager.fuelLevel.Height - 55), new Color(232, 232, 74));
             if (isGameOver == true)
             {
                 theBatch.Draw(Game1.textureManager.gameOver, new Vector2((screenRectangle.Width - Game1.textureManager.gameOver.Width) / 2, (screenRectangle.Height - Game1.textureManager.gameOver.Height) / 2), Color.White);
@@ -184,6 +188,7 @@ namespace RiverRide_Android.Display
                     {
                         heli.isLive = false;
                         bullet.isRemoved = true;
+                        score += 100;
                     }
                 }
                 foreach (Ship ship in textureAtlases.ships)
@@ -192,6 +197,7 @@ namespace RiverRide_Android.Display
                     {
                         ship.isLive = false;
                         bullet.isRemoved = true;
+                        score += 80;
                     }
                 }
                 foreach (Fuel fuel in textureAtlases.fuels)
