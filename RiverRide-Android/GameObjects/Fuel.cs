@@ -66,7 +66,8 @@ namespace RiverRide_Android.GameObjects
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, Location, Color.White);
+            if (isLive)
+                spriteBatch.Draw(texture, Location, Color.White);
         }
     }
 }

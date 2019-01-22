@@ -147,7 +147,6 @@ namespace RiverRide_Android.GameObjects
 
                 Fuel -= (float)0.006f;
             }
-
            // previousState = Keyboard.GetState();
         }
         public void SetInStartPosition()

@@ -130,9 +130,10 @@ namespace RiverRide_Android.Display
             player.bullets.Clear();
             textureAtlases.SetInStartPosition();
             player.SetInStartPosition();
-     
+        
             isGameStarted = true;
             isGameOver = false;
+            score = 0;
         }
 
         // Update enemies
@@ -165,7 +166,7 @@ namespace RiverRide_Android.Display
             foreach (Fuel fuel in textureAtlases.fuels)
             {
                 fuel.Update(theTime);
-                if (player.Location.Intersects(fuel.Location))
+                if (player.Location.Intersects(fuel.Location) && fuel.isLive)
                 {
                     if (player.Fuel + 0.20f >= 1f)
                         player.Fuel = 1f;
@@ -174,8 +175,13 @@ namespace RiverRide_Android.Display
                 
                 }
             }
-        }
 
+            if (player.Fuel <= 0f)
+            {
+                isGameOver = true;
+            }
+        }
+        
         // Update bullets
         public void updateBullets(GameTime theTime)
         {
